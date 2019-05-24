@@ -1,5 +1,20 @@
 const express = require('express')
 const app = express();
-const PORT = 3000;
+require('dotenv').config();
+const mongoose = require('mongoose');
+// database connection
+mongoose
+    .connect(process.env.MONGO_URI, { useNewUrlParser: true })
+    .then(() => console.log("Connected to the database server..."))
+    .catch(err => {
+        console.log("Opps! Error occurred", err);
+    });
+// express bodyparser
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
-app.listen(PORT,()=>console.log(`Server is on port ${PORT}`))
+// api routes middleware
+app.use("/api",require('./routes/auth'));
+
+// server listening
+app.listen(process.env.PORT,()=>console.log(`Server is on port ${process.env.PORT}`))
