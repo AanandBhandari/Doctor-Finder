@@ -19,11 +19,11 @@ const doctorSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    speciality : [{
+    specialities : [{
         type : String,
         required : true,
     }],
-    title : [{
+    titles : [{
         type : String,
         required : true
     }],

@@ -1,8 +1,10 @@
 const emailPatt = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/;
 const stringPatt = /^[a-zA-Z]+$/;
 const numberPatt = /^[0-9]+$/;
-exports.validateDoctorSignup= (req,res,next) => {
-    const {speciality,title} = require('./doctordata')
+exports.validateDoctorSignup= async(req,res,next) => {
+    const DoctorData = require('../models/DoctorData')
+    const data =await DoctorData.find({})
+    const {speciality,title} = data[0]
     let { name, lastname, email, password, specialities, titles, phoneno} = req.body;
     const error = [];
     let i = 0;

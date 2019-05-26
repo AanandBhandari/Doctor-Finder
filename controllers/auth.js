@@ -7,7 +7,7 @@ exports.signup = async (req, res) => {
         return res.status(403).json({
             error: "Email is taken!"
         });
-    const doctor = await new Doctor(req.body);
+    const doctor = new Doctor(req.body);
     await doctor.save();
     res.status(201).json({ message: "Signup success! Please login." });
 };
