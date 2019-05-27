@@ -47,3 +47,6 @@ exports.validateDoctorSignup= async(req,res,next) => {
     }
     next();
 }
+exports.validateDoctorSignin = (req,res,next) => {
+    const {email,password} = req.body;
+}
