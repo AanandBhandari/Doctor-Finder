@@ -49,4 +49,16 @@ exports.validateDoctorSignup= async(req,res,next) => {
 }
 exports.validateDoctorSignin = (req,res,next) => {
     const {email,password} = req.body;
+    let error = [];
+    
+    if (!email.match(emailPatt)) {
+        error.push('Invalid email')
+    }
+    if (password.length < 8) {
+        error.push('Password lenght should not be less than 8')
+    }
+    if (error.length > 0) {
+        return res.status(400).json({ error })
+    }
+    next();
 }

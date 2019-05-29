@@ -45,41 +45,47 @@ const doctorSchema = new mongoose.Schema({
         default: Date.now
     },
     isRegistred : {
-        type : Boolean,
-        default : false
+        type : Boolean
     }
 })
 
-doctorSchema.pre('save',function(next){
-    let doctor = this;
+const sha512 = function (password, salt) {
+    let hash = crypto.createHmac('sha512', salt);
+    hash.update(password);
+    let value = hash.digest('hex');
+    return {
+        passwordHash: value
+    };
+};
+doctorSchema.pre('save',function(next){;
+    let doctor = this;  
     if (doctor.isModified('password')) {
         // salt
-        let ranStr = function () {
+        const ranStr = function () {
             return crypto.randomBytes(Math.ceil(8))
                 .toString('hex')
                 .slice(0, 16);
         };
         // applying sha512 alogrithm
-        let sha512 = function (password, salt) {
-            let hash = crypto.createHmac('sha512', salt);
-            hash.update(password);
-            let value = hash.digest('hex');
-            return {
-                salt: salt,
-                passwordHash: value
-            };
-        };
-        function saltHashPassword(doctorpassword) {
             let salt = ranStr(16); 
-            let passwordData = sha512(doctorpassword, salt);
+            let passwordData = sha512(doctor.password, salt);
             doctor.password = passwordData.passwordHash;
-            doctor.salt = passwordData.salt;
-        }
-        saltHashPassword(doctor.password)
+            doctor.salt = salt;
         next();
     } else {
         next();
     }
 })
-
+doctorSchema.statics.findByCredentials = async function (email,password) {
+    let Doctor = this;
+        const doctor =await Doctor.findOne({ email })
+        if (doctor) {
+            let passwordData = sha512(password, doctor.salt)
+            if (passwordData.passwordHash == doctor.password) {
+                return doctor
+            }
+        }
+        throw 'Invalid email or password'
+    }
+    
 module.exports = mongoose.model("Doctor", doctorSchema);
