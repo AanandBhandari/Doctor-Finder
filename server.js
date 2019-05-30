@@ -14,8 +14,8 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 // api routes middleware
-app.use("/api",require('./routes/auth'));
-app.use("/api", require('./routes/doctor'));
+app.use("/api",require('./routes/doctor/auth'));
+app.use("/api", require('./routes/doctor/doctor'));
 
 // server listening
 app.listen(process.env.PORT,()=>console.log(`Server is on port ${process.env.PORT}`))
