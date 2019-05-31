@@ -4,7 +4,9 @@ const fs = require("fs");
 
 exports.doctorById = async (req,res,next) => {
     try {
-        const doctor = await Doctor.findById(req.params.id).select("name lastname email phoneno website specialities titles currentCity photo")
+        const doctor = await Doctor.findById(req.params.id)
+        doctor.salt = undefined
+        doctor.password = undefined
         if (doctor) {
            req.profile = doctor
            return next();
@@ -87,4 +89,22 @@ exports.addprofilePicture = async(req,res) => {
         }
         res.json(result.photo);
     });
+}
+
+exports.addLocation = async (req,res) => {
+    try {
+        const { longitude, latitude } = req.query
+        location = {
+            type: "Point",
+            coordinates: [longitude, latitude]
+        }
+        req.profile.location = location
+       const result = await req.profile.save()
+       if (result) {
+           return res.json(result.location);
+       }
+       throw 'unable to save location'
+    } catch (error) {
+        res.status(400).json(error)
+    }
 }

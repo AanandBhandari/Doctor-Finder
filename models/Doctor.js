@@ -19,6 +19,10 @@ const doctorSchema = new mongoose.Schema({
         data: Buffer,
         contentType: String
     },
+    location: {
+        type: { type: String },
+        coordinates: []
+    },
     email: {
         type: String,
         trim: true,
@@ -56,6 +60,9 @@ const doctorSchema = new mongoose.Schema({
         type : Boolean
     }
 })
+
+// We index on location and let mongoDB know we are using a “2dsphere”.
+// doctorSchema.index({ location: "2dsphere" });
 
 const sha512 = function (password, salt) {
     let hash = crypto.createHmac('sha512', salt);

@@ -95,7 +95,6 @@ function parseToken(token) {
 exports.hasAuthorization = async (req,res,next) => {
     try {
         const sameDoctor = req.profile && req.doctor &&  req.profile._id.toString() === req.doctor._id.toString()
-        console.log(sameDoctor);
         if(sameDoctor) {
            return next();
         }

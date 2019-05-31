@@ -39,6 +39,24 @@ exports.validateDoctorUpdateData =async (req,res,next) => {
     }
     next();
 }
+
+exports.validateGeolocation = async (req,res,next) => {
+    let error = []
+    console.log(req.query);
+    console.log(req.params);
+    const {longitude,latitude} = req.query
+    if (longitude <= -180 || longitude >= 180) {
+        error.push('Invalid longtitude')
+    }
+    if (latitude <=-90 || latitude >=90) {
+        error.push('Invalid latitude')
+    }
+    if (error.length > 0) {
+        return res.status(400).json({ error })
+    }
+    next();
+}
+
 async function validate (req,res,error) {
     const data = await DoctorData.find({})
     const { speciality, title } = data[0]
