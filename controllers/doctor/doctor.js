@@ -1,8 +1,10 @@
 const Doctor = require('../../models/Doctor')
+const formidable = require("formidable");
+const fs = require("fs");
 
 exports.doctorById = async (req,res,next) => {
     try {
-        const doctor = await Doctor.findById(req.params.id).select("name lastname email phoneno website specialities titles currentCity")
+        const doctor = await Doctor.findById(req.params.id).select("name lastname email phoneno website specialities titles currentCity photo")
         if (doctor) {
            req.profile = doctor
            return next();
@@ -60,4 +62,29 @@ exports.updateDoctor = async(req,res) => {
     } catch (error) {
         res.status(400).json({error})
     }
+}
+
+exports.addprofilePicture = async(req,res) => {
+    let form = new formidable.IncomingForm();
+    form.keepExtensions = true;
+    form.parse(req, (err, fields, files) => {
+        if (err) {
+            return res.status(400).json({
+                error: "Photo could not be uploaded"
+            });
+        }
+        if (files.photo) {
+            req.profile.photo.data = fs.readFileSync(files.photo.path);
+            req.profile.photo.contentType = files.photo.type;
+        }
+        
+    })
+    req.profile.save((err, result) => {
+        if (err) {
+            return res.status(400).json({
+                error: err
+            });
+        }
+        res.json(result.photo);
+    });
 }

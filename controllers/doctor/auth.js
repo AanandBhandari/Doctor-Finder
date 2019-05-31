@@ -77,7 +77,7 @@ exports.authenticator = async (req, res, next) => {
                 throw 'Invalid User'
             }
             throw 'Invalid Token'
-        }
+        } 
         throw 'Invalid User'
     } catch (error) {
         res.status(401).json(error)

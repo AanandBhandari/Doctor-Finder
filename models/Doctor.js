@@ -15,6 +15,10 @@ const doctorSchema = new mongoose.Schema({
         type : String,
         trim : true
     },
+    photo: {
+        data: Buffer,
+        contentType: String
+    },
     email: {
         type: String,
         trim: true,
