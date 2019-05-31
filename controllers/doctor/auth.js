@@ -21,11 +21,12 @@ exports.signup = async (req, res) => {
             // await verifyDoctorEmail(req.body.email,req.body.name,token)
             res.status(200).json({ message: `Follow the link provided to ${req.body.email} to verify it.` });
             setTimeout(async () => {
+                // console.log(req.body.email);
                 const doctor = await Doctor.findOne({ email: req.body.email })
                 !doctor.isRegistred && await Doctor.deleteOne({ _id: doctor._id });
                 doctor.isRegistred && await Doctor.updateOne({ _id: doctor._id }, { $unset: { isRegistred: "" } }, { multi: false });
 
-        }, 100000)
+        }, 10000)
             
         }
         
@@ -61,7 +62,7 @@ exports.signin = async (req,res) => {
 }
 
 // authentication middleware
-exports.authenticater = async (req, res, next) => {
+exports.authenticator = async (req, res, next) => {
     const token = req.headers.authorization;
     try {
         
@@ -73,7 +74,7 @@ exports.authenticater = async (req, res, next) => {
                     req.doctor = doctor
                    return next();
                 }
-                throw 'doctor not found'
+                throw 'Invalid User'
             }
             throw 'Invalid Token'
         }
@@ -92,12 +93,10 @@ function parseToken(token) {
 
 // has authorization middleware
 exports.hasAuthorization = async (req,res,next) => {
-    console.log('second');
     try {
         const sameDoctor = req.profile && req.doctor &&  req.profile._id.toString() === req.doctor._id.toString()
         console.log(sameDoctor);
         if(sameDoctor) {
-            console.log('third');
            return next();
         }
         throw 'User is not authorized to perform this action'

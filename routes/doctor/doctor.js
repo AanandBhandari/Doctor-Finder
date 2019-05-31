@@ -1,14 +1,16 @@
 const express = require('express')
 const router = express.Router()
-const { getDoctors, getDoctor, doctorById, deleteDoctor} = require('../../controllers/doctor/doctor')
-const {authenticater,hasAuthorization } = require('../../controllers/doctor/auth')
+const { getDoctors, getDoctor, doctorById, deleteDoctor,updateDoctor} = require('../../controllers/doctor/doctor')
+const {authenticator,hasAuthorization } = require('../../controllers/doctor/auth')
+const {validateDoctorUpdateData} = require('../../validator')
 
 
-router.get('/getDoctors',authenticater,getDoctors)
+router.get('/getDoctors',authenticator,getDoctors)
 
 router.route('/doctor/:id')
-        .get(authenticater,getDoctor)
-        .delete(authenticater,hasAuthorization,deleteDoctor)
+        .get(authenticator,getDoctor)
+        .delete(authenticator,hasAuthorization,deleteDoctor)
+        .put(authenticator, validateDoctorUpdateData,hasAuthorization,updateDoctor)
 
 
 router.param('id', doctorById)

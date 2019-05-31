@@ -11,6 +11,10 @@ const doctorSchema = new mongoose.Schema({
         trim : true,
         required : true
     },
+    currentCity : {
+        type : String,
+        trim : true
+    },
     email: {
         type: String,
         trim: true,
