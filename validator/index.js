@@ -42,8 +42,6 @@ exports.validateDoctorUpdateData =async (req,res,next) => {
 
 exports.validateGeolocation = async (req,res,next) => {
     let error = []
-    console.log(req.query);
-    console.log(req.params);
     const {longitude,latitude} = req.query
     if (longitude <= -180 || longitude >= 180) {
         error.push('Invalid longtitude')

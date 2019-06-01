@@ -74,19 +74,20 @@ exports.addprofilePicture = async(req,res) => {
             });
         }
         if (files.photo) {
-            req.profile.photo.data = fs.readFileSync(files.photo.path);
-            req.profile.photo.contentType = files.photo.type;
+            req.profile.avatar.data = fs.readFileSync(files.photo.path);
+            req.profile.avatar.contentType = files.photo.type;
         }
         
+        console.log(req.profile)
+        req.profile.save((err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                });
+            }
+            res.json(result.photo);
+        });
     })
-    req.profile.save((err, result) => {
-        if (err) {
-            return res.status(400).json({
-                error: err
-            });
-        }
-        res.json(result.photo);
-    });
 }
 
 exports.addLocation = async (req,res) => {
