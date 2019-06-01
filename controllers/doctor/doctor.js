@@ -4,7 +4,7 @@ const fs = require("fs");
 
 exports.doctorById = async (req,res,next) => {
     try {
-        const doctor = await Doctor.findById(req.params.id).select("name lastname email phoneno website specialities titles currentCity photo location")
+        const doctor = await Doctor.findById(req.params.id).select("name lastname email phoneno website specialities titles currentCity avatar location")
         if (doctor) {
            req.profile = doctor
            return next();
@@ -20,7 +20,7 @@ exports.getDoctor = async (req,res) => {
 
 exports.getDoctors =async (req,res) => {
     try {
-        const doctors = await Doctor.find({}).select("name lastname email phoneno website specialities titles currentCity photo location")
+        const doctors = await Doctor.find({}).select("name lastname email phoneno website specialities titles currentCity avatar location")
        if (doctors) {
            
           return res.status(200).json(doctors)
@@ -77,15 +77,13 @@ exports.addprofilePicture = async(req,res) => {
             req.profile.avatar.data = fs.readFileSync(files.photo.path);
             req.profile.avatar.contentType = files.photo.type;
         }
-        
-        console.log(req.profile)
         req.profile.save((err, result) => {
             if (err) {
                 return res.status(400).json({
                     error: err
                 });
             }
-            res.json(result.photo);
+            res.json(result.avatar);
         });
     })
 }

@@ -5,10 +5,10 @@ const {authenticator,hasAuthorization } = require('../../controllers/doctor/auth
 const { validateDoctorUpdateData, validateGeolocation} = require('../../validator')
 
 
-router.get('/getDoctors',authenticator,getDoctors)
+router.get('/getDoctors',getDoctors)
 
 router.route('/doctor/:id')
-        .get(authenticator,getDoctor)
+        .get(getDoctor)
         .delete(authenticator,hasAuthorization,deleteDoctor)
         .put(authenticator, hasAuthorization, validateDoctorUpdateData,updateDoctor)
 
