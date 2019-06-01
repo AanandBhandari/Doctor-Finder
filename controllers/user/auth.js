@@ -72,8 +72,6 @@ exports.authenticator = async (req, res, next) => {
                 const user = await User.findById(result._id).select("name  email ")
                 if (user) {
                     req.user = user
-                    
-                    console.log(user);
                     return next();
                 }
                 throw 'Invalid User'

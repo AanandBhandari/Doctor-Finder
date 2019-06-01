@@ -4,7 +4,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 // database connection
 mongoose
-    .connect(process.env.MONGO_URI, { useNewUrlParser: true })
+    .connect(process.env.MONGO_URI, { useCreateIndex: true,useNewUrlParser: true })
     .then(() => console.log("Connected to the database server..."))
     .catch(err => {
         console.log("Opps! Error occurred", err);

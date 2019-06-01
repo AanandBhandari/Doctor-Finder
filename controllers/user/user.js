@@ -1,6 +1,8 @@
 const User = require('../../models/User')
+const Doctor = require('../../models/Doctor')
 const formidable = require("formidable");
 const fs = require("fs");
+const {calculateDistance} = require('../../helper/geoDistance')
 
 exports.userById = async (req, res, next) => {
     try {
@@ -101,4 +103,38 @@ exports.addLocation = async (req, res) => {
     } catch (error) {
         res.status(400).json(error)
     }
+}
+
+exports.getDoctorsByLocation = (req,res) => {
+    Doctor.find({
+        location: {
+            $near: {
+                $maxDistance: 1000*req.query.d,
+                $geometry: {
+                    type: "Point",
+                    coordinates: req.profile.location.coordinates
+                }
+            }
+        }
+    })
+    .select("name lastname email phoneno currentCity specialities titles website location")
+        .then(results => {
+            if (results) {
+                // let result = results.map(el=> {
+                //     el.d =calculateDistance(req.profile.location.coordinates[0], req.profile.location.coordinates[1], el.location.coordinates[0], el.location.coordinates[1]);
+                //     return el;
+                // })
+                for (let i = 0; i < results.length; i++) {
+                    const element = results[i];
+                    element.d = 'hello'
+                    console.log(element);
+                    
+                }
+                res.json(results)
+            }
+            // console.log(JSON.stringify(results, 0, 2));
+        }).catch(error=>{
+            res.status(400).json(error);
+        })
+    
 }

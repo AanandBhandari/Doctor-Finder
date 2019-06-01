@@ -70,7 +70,7 @@ const doctorSchema = new mongoose.Schema({
 })
 
 // We index on location and let mongoDB know we are using a “2dsphere”.
-// doctorSchema.index({ location: "2dsphere" });
+doctorSchema.index({ location: "2dsphere" });
 
 const sha512 = function (password, salt) {
     let hash = crypto.createHmac('sha512', salt);
