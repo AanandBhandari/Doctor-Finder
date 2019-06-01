@@ -1,0 +1,104 @@
+const User = require('../../models/User')
+const formidable = require("formidable");
+const fs = require("fs");
+
+exports.userById = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.params.id).select("name lastname email phoneno website specialities titles currentCity avatar location")
+        if (user) {
+            req.profile = user
+            return next();
+        }
+        throw 'User not found'
+    } catch (error) {
+        res.status(400).json(error)
+    }
+}
+exports.getUser = async (req, res) => {
+    res.json(req.profile)
+}
+
+exports.getUsers = async (req, res) => {
+    try {
+        const users = await User.find({}).select("name lastname email phoneno website specialities titles currentCity avatar location")
+        if (users) {
+
+            return res.status(200).json(users)
+        }
+        throw 'No Users found'
+    } catch (error) {
+        res.status(400).json(error)
+    }
+}
+
+exports.deleteUser = async (req, res) => {
+    try {
+        const deletedUser = await req.profile.remove();
+        if (deletedUser) {
+
+            return res.json({ message: "User deleted successfully" });
+        }
+        throw 'User not found'
+    } catch (error) {
+        res.status(400).json(error)
+    }
+}
+exports.updateUser = async (req, res) => {
+    try {
+        const { name, lastname, email, phoneno, currentCity } = req.body
+        req.profile.name = name
+        req.profile.lastname = lastname
+        req.profile.email = email
+        req.profile.phoneno = phoneno
+        req.profile.currentCity = currentCity
+        const updateuser = req.profile.save()
+        if (updateuser) {
+            return res.json({ message: 'User updated successfully' })
+        }
+        throw 'Could not be updated'
+    } catch (error) {
+        res.status(400).json({ error })
+    }
+}
+
+exports.addprofilePicture = async (req, res) => {
+    let form = new formidable.IncomingForm();
+    form.keepExtensions = true;
+    form.parse(req, (err, fields, files) => {
+        if (err) {
+            return res.status(400).json({
+                error: "Photo could not be uploaded"
+            });
+        }
+        if (files.photo) {
+            req.profile.avatar.data = fs.readFileSync(files.photo.path);
+            req.profile.avatar.contentType = files.photo.type;
+        }
+        req.profile.save((err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    error: err
+                });
+            }
+            res.json(result.avatar);
+        });
+    })
+}
+
+exports.addLocation = async (req, res) => {
+    try {
+        const { longitude, latitude } = req.query
+        location = {
+            type: "Point",
+            coordinates: [longitude, latitude]
+        }
+        req.profile.location = location
+        const result = await req.profile.save()
+        if (result) {
+            return res.json(result.location);
+        }
+        throw 'unable to save location'
+    } catch (error) {
+        res.status(400).json(error)
+    }
+}
