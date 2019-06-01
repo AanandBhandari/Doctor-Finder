@@ -1,5 +1,5 @@
 const Doctor = require('../../models/Doctor')
-const { verifyDoctorEmail} = require('../../helper/emailverify')
+const { verifyEmail} = require('../../helper/emailverify')
 const jwt = require('jsonwebtoken');
 
 exports.signup = async (req, res) => {

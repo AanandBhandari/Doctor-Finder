@@ -2,6 +2,8 @@ const emailPatt = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/;
 const stringPatt = /^[a-zA-Z]+$/;
 const numberPatt = /^[0-9]+$/;
 const DoctorData = require('../models/DoctorData')
+
+// DOCTOR PART
 exports.validateDoctorSignup= async(req,res,next) => {
     let error = []
     await validate(req,res,error)

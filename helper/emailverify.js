@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-exports.verifyDoctorEmail = async(email, name, token) => {
+exports.verifyEmail = async(email, name, token) => {
     let transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
