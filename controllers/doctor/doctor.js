@@ -4,9 +4,7 @@ const fs = require("fs");
 
 exports.doctorById = async (req,res,next) => {
     try {
-        const doctor = await Doctor.findById(req.params.id)
-        doctor.salt = undefined
-        doctor.password = undefined
+        const doctor = await Doctor.findById(req.params.id).select("name lastname email phoneno website specialities titles currentCity photo location")
         if (doctor) {
            req.profile = doctor
            return next();
@@ -22,7 +20,7 @@ exports.getDoctor = async (req,res) => {
 
 exports.getDoctors =async (req,res) => {
     try {
-        const doctors = await Doctor.find({}).select("name lastname email phoneno website specialities titles currentCity")
+        const doctors = await Doctor.find({}).select("name lastname email phoneno website specialities titles currentCity photo location")
        if (doctors) {
            
           return res.status(200).json(doctors)

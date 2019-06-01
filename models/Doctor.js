@@ -1,5 +1,14 @@
 const mongoose = require("mongoose");
 const crypto = require("crypto");
+const pointSchema = new mongoose.Schema({
+    type: {
+        type: String,
+        enum: ['Point']
+    },
+    coordinates: {
+        type: [Number]
+    }
+});
 const doctorSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -20,8 +29,7 @@ const doctorSchema = new mongoose.Schema({
         contentType: String
     },
     location: {
-        type: { type: String },
-        coordinates: []
+        type: pointSchema,
     },
     email: {
         type: String,

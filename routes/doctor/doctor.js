@@ -12,8 +12,8 @@ router.route('/doctor/:id')
         .delete(authenticator,hasAuthorization,deleteDoctor)
         .put(authenticator, hasAuthorization, validateDoctorUpdateData,updateDoctor)
 
-router.patch('/doctor/addProfilePicture/:id', authenticator, hasAuthorization, addprofilePicture)
-router.patch('/doctor/addLocation/:id/', validateGeolocation, authenticator, hasAuthorization,addLocation)
+router.put('/doctor/addProfilePicture/:id', authenticator, hasAuthorization, addprofilePicture)
+router.put('/doctor/addLocation/:id/', validateGeolocation, authenticator, hasAuthorization,addLocation)
 
 
 router.param('id', doctorById)
