@@ -67,11 +67,13 @@ exports.authenticator = async (req, res, next) => {
     try {
 
         if (token) {
-            const user = await parseToken(token)
-            if (user) {
-                const user = await User.findById(user._id).select("name  email ")
+            const result = await parseToken(token)
+            if (result) {
+                const user = await User.findById(result._id).select("name  email ")
                 if (user) {
                     req.user = user
+                    
+                    console.log(user);
                     return next();
                 }
                 throw 'Invalid User'
@@ -100,6 +102,6 @@ exports.hasAuthorization = async (req, res, next) => {
         }
         throw 'User is not authorized to perform this action'
     } catch (error) {
-        res.status(403).json({ error: error })
+        res.status(401).json({ error: error })
     }
 }

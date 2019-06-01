@@ -4,7 +4,7 @@ const fs = require("fs");
 
 exports.userById = async (req, res, next) => {
     try {
-        const user = await User.findById(req.params.id).select("name lastname email phoneno website specialities titles currentCity avatar location")
+        const user = await User.findById(req.params.id).select("name lastname email phoneno currentCity avatar location")
         if (user) {
             req.profile = user
             return next();
@@ -20,7 +20,7 @@ exports.getUser = async (req, res) => {
 
 exports.getUsers = async (req, res) => {
     try {
-        const users = await User.find({}).select("name lastname email phoneno website specialities titles currentCity avatar location")
+        const users = await User.find({}).select("name lastname email phoneno currentCity avatar location")
         if (users) {
 
             return res.status(200).json(users)

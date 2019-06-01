@@ -7,13 +7,13 @@ const { validateUserUpdateData, validateGeolocation } = require('../../validator
 
 router.get('/getUsers', getUsers)
 
-router.route('/doctor/:id')
+router.route('/user/:id')
     .get(getUser)
     .delete(authenticator, hasAuthorization, deleteUser)
     .put(authenticator, hasAuthorization, validateUserUpdateData, updateUser)
 
-router.put('/doctor/addProfilePicture/:id', authenticator, hasAuthorization, addprofilePicture)
-router.put('/doctor/addLocation/:id/', validateGeolocation, authenticator, hasAuthorization, addLocation)
+router.put('/user/addProfilePicture/:id', authenticator, hasAuthorization, addprofilePicture)
+router.put('/user/addLocation/:id/', validateGeolocation, authenticator, hasAuthorization, addLocation)
 
 
 router.param('id', userById)
