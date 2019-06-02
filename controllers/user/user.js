@@ -139,3 +139,14 @@ exports.getDoctorBySpecialities = async(req,res) => {
         .then(doctors=> res.json(doctors))
         .catch(e => res.status(400).json(e))
 }
+exports.getDoctorByCity = async(req,res) => {
+    console.log('hello');
+    if (req.query.city) {
+        const city = req.query.city.toLowerCase().replace(/\s/g, '')
+        Doctor.find({currentCity : city })
+            .select("name lastname email phoneno currentCity specialities titles website location")
+            .then(doctors => res.json(doctors))
+            .catch(e => res.status(400).json(e))
+    }
+    res.status(404).json('Bad Request')
+}
