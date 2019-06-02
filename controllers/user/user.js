@@ -134,7 +134,7 @@ exports.getDoctorsByLocation = (req,res) => {
 }
 
 exports.getDoctorBySpecialities = async(req,res) => {
-    Doctor.find({ specialities: {$elemMatch : req.query.specialities}})
+    Doctor.find({ specialities: {$in : req.query.specialities}})
         .select("name lastname email phoneno currentCity specialities titles website location")
         .then(doctors=> res.json(doctors))
         .catch(e => res.status(400).json(e))
