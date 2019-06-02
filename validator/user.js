@@ -1,6 +1,7 @@
 const emailPatt = /^[\w\-\.\+]+\@[a-zA-Z0-9\.\-]+\.[a-zA-z0-9]{2,4}$/;
 const stringPatt = /^[a-zA-Z]+$/;
 const numberPatt = /^[0-9]+$/;
+const DoctorData = require('../models/DoctorData')
 
 // USER PART
 exports.validateUserSignup = async (req, res, next) => {
@@ -32,6 +33,34 @@ exports.validateUserSignin = (req, res, next) => {
     }
     next();
 }
+
+exports.validateSpecialities = async(req,res,next) => {
+    let error=[];
+    const data = await DoctorData.find({})
+    const { speciality } = data[0]
+    let {specialities} = req.query
+    // console.log(typeof(specialities));
+    if (typeof(specialities) === 'string') {
+        
+        specialities = new Array(specialities)
+    }
+    let i = 0;
+    specialities = specialities.map(s => s.toLowerCase().replace(/\s/g, ''))
+    req.query.specialities = specialities
+    speciality.forEach(s => {
+        if (specialities.indexOf(s.toLowerCase().replace(/\s/g, '')) >= 0) {
+            i++
+        }
+    });
+    if (i !== specialities.length) {
+        error.push('Invalid Speciality')
+    }
+    if (error.length > 0) {
+        return res.status(400).json({ error })
+    }
+    next();
+}
+
 exports.validateUserUpdateData = async (req, res, next) => {
     let error = []
     await validate(req, res, error);
@@ -57,7 +86,11 @@ exports.validateGeolocation = async (req, res, next) => {
 }
 
 async function validate(req, res, error) {
-    let { name, lastname, email, phoneno } = req.body;
+    let { name, lastname, email, phoneno, currentCity } = req.body;
+    if (currentCity) {
+
+        req.body.currentCity = currentCity.toLowerCase().replace(/\s/g, '')
+    }
     if (!name.match(stringPatt) || !lastname.match(stringPatt)) {
         error.push('Invalid Name OR Lastname')
     }

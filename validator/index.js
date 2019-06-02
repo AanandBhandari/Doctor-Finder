@@ -60,11 +60,25 @@ exports.validateGeolocation = async (req,res,next) => {
 async function validate (req,res,error) {
     const data = await DoctorData.find({})
     const { speciality, title } = data[0]
-    let { name, lastname, email, specialities, titles, phoneno } = req.body;
+    let { name, lastname, email, specialities, titles, phoneno ,currentCity } = req.body;
     let i = 0;
     let j = 0;
+    if (typeof (specialities) === 'string') {
+
+        specialities = new Array(specialities)
+    }
+    if (typeof (titles) === 'string') {
+
+        titles = new Array(titles)
+    }
+    if (currentCity) {
+        
+        req.body.currentCity =currentCity.toLowerCase().replace(/\s/g, '')
+    }
     specialities = specialities.map(s => s.toLowerCase().replace(/\s/g, ''))
+    req.body.specialities = specialities
     titles = titles.map(s => s.toLowerCase().replace(/\s/g, ''))
+    req.body.titles = titles
     if (!name.match(stringPatt) || !lastname.match(stringPatt)) {
         error.push('Invalid Name OR Lastname')
     }

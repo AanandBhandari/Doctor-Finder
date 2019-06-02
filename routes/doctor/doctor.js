@@ -13,7 +13,7 @@ router.route('/doctor/:id')
         .put(authenticator, hasAuthorization, validateDoctorUpdateData,updateDoctor)
 
 router.put('/doctor/addProfilePicture/:id', authenticator, hasAuthorization, addprofilePicture)
-router.put('/doctor/addLocation/:id/', validateGeolocation, authenticator, hasAuthorization,addLocation)
+router.put('/doctor/addGeoLocation/:id/', validateGeolocation, authenticator, hasAuthorization,addLocation)
 
 
 router.param('id', doctorById)

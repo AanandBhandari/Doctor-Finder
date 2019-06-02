@@ -45,10 +45,12 @@ const doctorSchema = new mongoose.Schema({
     },
     specialities : [{
         type : String,
+        trim : true,
         required : true,
     }],
     titles : [{
         type : String,
+        trim : true,
         required : true
     }],
     description : {

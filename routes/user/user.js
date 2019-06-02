@@ -1,8 +1,8 @@
 const express = require('express')
 const router = express.Router()
-const { getUsers, getUser, userById, deleteUser, updateUser, addprofilePicture, addLocation, getDoctorsByLocation } = require('../../controllers/user/user')
+const { getUsers, getUser, userById, deleteUser, updateUser, addprofilePicture, addLocation, getDoctorsByLocation,              getDoctorBySpecialities} = require('../../controllers/user/user')
 const { authenticator, hasAuthorization } = require('../../controllers/user/auth')
-const { validateUserUpdateData, validateGeolocation } = require('../../validator/user')
+const { validateUserUpdateData, validateGeolocation, validateSpecialities} = require('../../validator/user')
 
 
 router.get('/getUsers', getUsers)
@@ -16,8 +16,10 @@ router.put('/user/addProfilePicture/:id', authenticator, hasAuthorization, addpr
 router.put('/user/addLocation/:id/', validateGeolocation, authenticator, hasAuthorization, addLocation)
 
 // looking for doctors
-// by location 
-router.get('/user/getDoctorsByLocation/:id',validateGeolocation,authenticator,hasAuthorization,getDoctorsByLocation)
+// by geolocation 
+router.get('/user/getDoctorsByGeoLocation/:id',validateGeolocation,authenticator,hasAuthorization,getDoctorsByLocation)
+// by specialities
+router.get('/user/getDoctorBySpecialities/:id', validateSpecialities, authenticator, hasAuthorization, getDoctorBySpecialities)
 
 router.param('id', userById)
 module.exports = router
