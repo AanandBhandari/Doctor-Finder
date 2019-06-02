@@ -16,6 +16,7 @@ router.put('/user/addProfilePicture/:id', authenticator, hasAuthorization, addpr
 router.put('/user/addLocation/:id/', validateGeolocation, authenticator, hasAuthorization, addLocation)
 
 // looking for doctors
+// by location 
 router.get('/user/getDoctorsByLocation/:id',validateGeolocation,authenticator,hasAuthorization,getDoctorsByLocation)
 
 router.param('id', userById)

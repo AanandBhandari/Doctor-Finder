@@ -118,21 +118,15 @@ exports.getDoctorsByLocation = (req,res) => {
         }
     })
     .select("name lastname email phoneno currentCity specialities titles website location")
+    .lean()
         .then(results => {
             if (results) {
-                // let result = results.map(el=> {
-                //     el.d =calculateDistance(req.profile.location.coordinates[0], req.profile.location.coordinates[1], el.location.coordinates[0], el.location.coordinates[1]);
-                //     return el;
-                // })
-                for (let i = 0; i < results.length; i++) {
-                    const element = results[i];
-                    element.d = 'hello'
-                    console.log(element);
-                    
-                }
-                res.json(results)
+                let result = results.map(el=> {
+                    el.d =calculateDistance(req.profile.location.coordinates[0], req.profile.location.coordinates[1], el.location.coordinates[0], el.location.coordinates[1]);
+                    return el;
+                })
+                res.json(result)
             }
-            // console.log(JSON.stringify(results, 0, 2));
         }).catch(error=>{
             res.status(400).json(error);
         })
