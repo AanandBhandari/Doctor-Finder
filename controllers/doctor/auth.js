@@ -69,7 +69,7 @@ exports.authenticator = async (req, res, next) => {
         if (token) {
             const user = await parseToken(token)
             if (user) {
-                const doctor = await Doctor.findById(user._id).select("name  email ")
+                const doctor = await Doctor.findById(user._id).select("name  email")
                 if (doctor) {
                     req.doctor = doctor
                    return next();

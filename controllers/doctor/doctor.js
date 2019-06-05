@@ -1,10 +1,11 @@
 const Doctor = require('../../models/Doctor')
+const Reviews = require('../../models/Reviews')
 const formidable = require("formidable");
 const fs = require("fs");
 
 exports.doctorById = async (req,res,next) => {
     try {
-        const doctor = await Doctor.findById(req.params.id).select("name lastname email phoneno website specialities titles currentCity avatar location")
+        const doctor = await Doctor.findById(req.params.id).select("name lastname email phoneno website specialities titles currentCity avatar location reviews")
         if (doctor) {
            req.profile = doctor
            return next();
@@ -83,6 +84,7 @@ exports.addprofilePicture = async(req,res) => {
                     error: err
                 });
             }
+            res.set(("Content-Type", req.profile.avatar.contentType))
             res.json(result.avatar);
         });
     })
@@ -104,4 +106,30 @@ exports.addLocation = async (req,res) => {
     } catch (error) {
         res.status(400).json(error)
     }
+}
+
+exports.getReviews = (req, res) => {
+    const doctor = req.profile;
+    Reviews.find({_id : {$in : doctor.reviews}})
+    .then(reviews=> {
+        res.json(reviews)
+    })
+    .catch(e=>res.json('No reviews'))
+}
+
+exports.deleteReview = (req,res) => {
+    Reviews.findById(req.query.id)
+        .then(review => {
+            console.log(req.profile.reviews.includes(review._id))
+                Doctor.findOneAndUpdate({ reviews: review._id }, { $pull: { reviews: review._id } })
+                    .then(drReview => {
+                        review.remove()
+                            .then(r => {
+                                res.json('review deleted')
+                            })
+                            .catch(e => res.status(400).json(e))
+                    })
+                    .catch(e => res.status(400).json('this review does not exit'))
+        })
+        .catch(e => res.status(400).json('This review does not exit'))
 }

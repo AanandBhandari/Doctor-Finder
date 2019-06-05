@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const crypto = require("crypto");
+const Schema = mongoose.Schema
 const pointSchema = new mongoose.Schema({
     type: {
         type: String,
@@ -68,7 +69,11 @@ const doctorSchema = new mongoose.Schema({
     },
     isRegistred : {
         type : Boolean
-    }
+    },
+    reviews: [{
+        type: Schema.Types.ObjectId,
+        ref: 'reviews'
+    }]
 })
 
 // We index on location and let mongoDB know we are using a “2dsphere”.

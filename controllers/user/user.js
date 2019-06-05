@@ -1,5 +1,6 @@
 const User = require('../../models/User')
 const Doctor = require('../../models/Doctor')
+const Reviews = require('../../models/Reviews')
 const formidable = require("formidable");
 const fs = require("fs");
 const {calculateDistance} = require('../../helper/geoDistance')
@@ -82,6 +83,7 @@ exports.addprofilePicture = async (req, res) => {
                     error: err
                 });
             }
+            res.set(("Content-Type", req.profile.avatar.contentType))
             res.json(result.avatar);
         });
     })
@@ -133,20 +135,75 @@ exports.getDoctorsByLocation = (req,res) => {
     
 }
 
-exports.getDoctorBySpecialities = async(req,res) => {
+exports.getDoctorBySpecialities = (req,res) => {
     Doctor.find({ specialities: {$in : req.query.specialities}})
         .select("name lastname email phoneno currentCity specialities titles website location")
         .then(doctors=> res.json(doctors))
         .catch(e => res.status(400).json(e))
 }
-exports.getDoctorByCity = async(req,res) => {
-    console.log('hello');
-    if (req.query.city) {
+exports.getDoctorByCity =(req,res) => {
         const city = req.query.city.toLowerCase().replace(/\s/g, '')
         Doctor.find({currentCity : city })
             .select("name lastname email phoneno currentCity specialities titles website location")
             .then(doctors => res.json(doctors))
+            .catch(e => res.status(400).json('doctor not found'))
+}
+
+exports.reviewDoctor = (req,res) => {
+       Doctor.findById(req.query.id).then(doctor => {
+           const review = new Reviews({
+               user: req.user,
+               comment: req.body.comment,
+               star: req.body.star
+           })
+           doctor.reviews.push(review)
+           doctor.save().then(savedDoctor => {
+               review.save().then(savedReview => {
+                   res.json(savedReview)
+               })
+               .catch(err=> res.status(400).json('cannot saved review'))
+           })
+       }).catch(e => res.status(400).json('Doctor not found'))
+    
+}
+
+exports.editReview = (req,res) => {
+    // res.send('helloworld')
+    // edit review by cmt id
+    // Reviews.findOneAndUpdate({_id:req.query.id},{$set:{comment:req.body.comment,star : req.body.star}})
+    // .then(review =>res.json(review))
+    // .catch(e=>res.json('unauthorized'))
+    Reviews.findById(req.query.id)
+    .then(review=>{
+        if (review.user.equals(req.user._id)) {
+            review.comment = req.body.comment
+            review.star = req.body.star
+            review.save()
+            .then(r=>res.json(r))
             .catch(e => res.status(400).json(e))
-    }
-    res.status(404).json('Bad Request')
+        } else {
+            res.status(401).json('Unauthorized user')
+        }
+    })
+    .catch(e=>res.status(400).json('This review does not exit'))
+}
+
+exports.deleteReview = (req,res) => {
+    Reviews.findById(req.query.id)
+        .then(review => {
+            if (review.user.equals(req.user._id)) {
+                Doctor.findOneAndUpdate({ reviews: review._id }, { $pull: { reviews: review._id } })
+                .then(drReview=>{
+                    review.remove()
+                        .then(r => {
+                            res.json('review')
+                        })
+                        .catch(e => res.status(400).json(e))
+                })
+                .catch(e=>res.status(400).json('this review does not exit'))
+            } else {
+                res.status(401).json('Unauthorized user')
+            }
+        })
+        .catch(e => res.status(400).json('This review does not exit'))
 }
