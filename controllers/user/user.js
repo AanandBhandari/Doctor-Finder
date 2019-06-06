@@ -4,7 +4,7 @@ const Reviews = require('../../models/Reviews')
 const formidable = require("formidable");
 const fs = require("fs");
 const {calculateDistance} = require('../../helper/geoDistance')
-
+const perPage = 10
 exports.userById = async (req, res, next) => {
     try {
         const user = await User.findById(req.params.id).select("name lastname email phoneno currentCity avatar location")
@@ -22,8 +22,8 @@ exports.getUser = async (req, res) => {
 }
 
 exports.getUsers = async (req, res) => {
-    const perPage = 10
     const page = req.query.page || 1
+    
     try {
         const users = await User.find({})
         .skip((perPage*page)-perPage)
@@ -113,6 +113,7 @@ exports.addLocation = async (req, res) => {
 }
 
 exports.getDoctorsByLocation = (req,res) => {
+    const page = req.query.page || 1
     Doctor.find({
         location: {
             $near: {
@@ -124,6 +125,8 @@ exports.getDoctorsByLocation = (req,res) => {
             }
         }
     })
+    .skip((perPage * page) - perPage)
+    .limit(perPage)
     .select("name lastname email phoneno currentCity specialities titles website location")
     .lean()
         .then(results => {
@@ -141,14 +144,20 @@ exports.getDoctorsByLocation = (req,res) => {
 }
 
 exports.getDoctorBySpecialities = (req,res) => {
+    const page = req.query.page || 1
     Doctor.find({ specialities: {$in : req.query.specialities}})
+        .skip((perPage * page) - perPage)
+        .limit(perPage)
         .select("name lastname email phoneno currentCity specialities titles website location")
         .then(doctors=> res.json(doctors))
         .catch(e => res.status(400).json(e))
 }
 exports.getDoctorByCity =(req,res) => {
+        const page = req.query.page
         const city = req.query.city.toLowerCase().replace(/\s/g, '')
         Doctor.find({currentCity : city })
+            .skip((perPage * page) - perPage)
+            .limit(perPage)
             .select("name lastname email phoneno currentCity specialities titles website location")
             .then(doctors => res.json(doctors))
             .catch(e => res.status(400).json('doctor not found'))
