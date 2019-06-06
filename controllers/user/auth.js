@@ -1,6 +1,8 @@
 const User = require('../../models/User')
 const { verifyEmail } = require('../../helper/emailverify')
 const jwt = require('jsonwebtoken');
+const faker = require('faker')
+
 
 exports.signup = async (req, res) => {
     try {
@@ -102,4 +104,23 @@ exports.hasAuthorization = async (req, res, next) => {
     } catch (error) {
         res.status(401).json({ error: error })
     }
+}
+
+exports.createFakeUser = async(req, res) => {
+    const num = req.params.num;
+    for (let i = 0; i < num; i++) {
+        let user = {
+
+            name: faker.name.firstName(),
+            lastname: faker.name.lastName(),
+            password: faker.internet.password(),
+            email: faker.internet.email(),
+            // phoneno: faker.phone.phoneNumber(),
+            currentCity: faker.address.city()
+        }
+        let newuser = new User(user);
+        await newuser.save();
+
+    }
+    res.send(`${num} fake user is has been created`)
 }

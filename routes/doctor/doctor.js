@@ -14,6 +14,7 @@ router.put('/doctor/addGeoLocation/:id/', validateGeolocation, authenticator, ha
 
 router.route('/doctor/:id')
         .get(getDoctor)
+        // need to delete reviews too
         .delete(authenticator,hasAuthorization,deleteDoctor)
         .put(authenticator, hasAuthorization, validateDoctorUpdateData,updateDoctor)
 

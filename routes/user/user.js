@@ -4,7 +4,6 @@ const { getUsers, getUser, userById, deleteUser, updateUser, addprofilePicture, 
 const { authenticator, hasAuthorization } = require('../../controllers/user/auth')
 const { validateUserUpdateData, validateGeolocation, validateSpecialities} = require('../../validator/user')
 
-
 router.get('/getUsers', getUsers)
 
 router.put('/user/addProfilePicture/:id', authenticator, hasAuthorization, addprofilePicture)

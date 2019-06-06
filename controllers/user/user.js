@@ -22,8 +22,13 @@ exports.getUser = async (req, res) => {
 }
 
 exports.getUsers = async (req, res) => {
+    const perPage = 10
+    const page = req.query.page || 1
     try {
-        const users = await User.find({}).select("name lastname email phoneno currentCity avatar location")
+        const users = await User.find({})
+        .skip((perPage*page)-perPage)
+        .limit(perPage)
+        .select("name lastname email phoneno currentCity avatar location")
         if (users) {
 
             return res.status(200).json(users)
@@ -207,3 +212,4 @@ exports.deleteReview = (req,res) => {
         })
         .catch(e => res.status(400).json('This review does not exit'))
 }
+
