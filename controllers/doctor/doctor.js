@@ -2,7 +2,7 @@ const Doctor = require('../../models/Doctor')
 const Reviews = require('../../models/Reviews')
 const formidable = require("formidable");
 const fs = require("fs");
-
+const perPage = 10
 exports.doctorById = async (req,res,next) => {
     try {
         const doctor = await Doctor.findById(req.params.id).select("name lastname email phoneno website specialities titles currentCity avatar location reviews")
@@ -109,8 +109,11 @@ exports.addLocation = async (req,res) => {
 }
 
 exports.getReviews = (req, res) => {
+    const page = req.query.page||1
     const doctor = req.profile;
     Reviews.find({_id : {$in : doctor.reviews}})
+    .skip((perPage * page) - perPage)
+    .limit(perPage)
     .then(reviews=> {
         res.json(reviews)
     })
