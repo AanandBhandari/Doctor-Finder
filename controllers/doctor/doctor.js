@@ -20,8 +20,12 @@ exports.getDoctor = async (req,res) => {
 }
 
 exports.getDoctors =async (req,res) => {
+    const page = req.query.page
     try {
-        const doctors = await Doctor.find({}).select("name lastname email phoneno website specialities titles currentCity avatar location")
+        const doctors = await Doctor.find({})
+        .skip((perPage * page) - perPage)
+        .limit(perPage)
+        .select("name lastname email phoneno website specialities titles currentCity avatar location")
        if (doctors) {
            
           return res.status(200).json(doctors)
