@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { getUsers, getUser, userById, deleteUser, updateUser, addprofilePicture, addLocation, getDoctorsByLocation, getDoctorBySpecialities, getDoctorByCity, reviewDoctor, editReview, deleteReview} = require('../../controllers/user/user')
+const { getUsers, getUser, userById, deleteUser, updateUser, addprofilePicture, addLocation, getDoctorsByLocation, getDoctorBySpecialities, getDoctorByCity, getDoctorBySymptoms, reviewDoctor, editReview, deleteReview} = require('../../controllers/user/user')
 const { authenticator, hasAuthorization } = require('../../controllers/user/auth')
 const { validateUserUpdateData, validateGeolocation, validateSpecialities} = require('../../validator/user')
 
@@ -16,6 +16,8 @@ router.get('/user/getDoctorsByGeoLocation/:id',validateGeolocation,authenticator
 router.get('/user/getDoctorBySpecialities', validateSpecialities , getDoctorBySpecialities)
 // by city 
 router.get('/user/getDoctorByCity', getDoctorByCity)
+// search doctors by symptoms
+router.get('/user/getDoctorBySymptoms', getDoctorBySymptoms)
 
 // review doctor
 router.post('/user/reviewDoctor',authenticator,reviewDoctor)

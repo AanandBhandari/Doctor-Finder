@@ -4,6 +4,7 @@ const Reviews = require('../../models/Reviews')
 const formidable = require("formidable");
 const fs = require("fs");
 const {calculateDistance} = require('../../helper/geoDistance')
+const {predict} = require('../../helper/predict')
 const perPage = 10
 exports.userById = async (req, res, next) => {
     try {
@@ -222,3 +223,15 @@ exports.deleteReview = (req,res) => {
         .catch(e => res.status(400).json('This review does not exit'))
 }
 
+exports.getDoctorBySymptoms = async(req,res) => {
+    const result = await predict(req.body.symptoms)
+    console.log(result);
+    const page = req.query.page || 1
+    Doctor.find({ specialities: result })
+        .skip((perPage * page) - perPage)
+        .limit(perPage)
+        .select("name lastname email phoneno currentCity specialities titles website location")
+        .then(doctors => res.json(doctors))
+        .catch(e => res.status(400).json(e))
+    
+}

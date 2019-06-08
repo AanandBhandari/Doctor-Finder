@@ -20,7 +20,7 @@ exports.getDoctor = async (req,res) => {
 }
 
 exports.getDoctors =async (req,res) => {
-    const page = req.query.page
+    const page = req.query.page||1
     try {
         const doctors = await Doctor.find({})
         .skip((perPage * page) - perPage)

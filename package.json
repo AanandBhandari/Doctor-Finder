@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "brain.js": "^1.6.1",
     "dotenv": "^8.0.0",
     "express": "^4.17.0",
     "faker": "^4.1.0",
