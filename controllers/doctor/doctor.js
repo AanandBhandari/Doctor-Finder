@@ -18,7 +18,13 @@ exports.doctorById = async (req,res,next) => {
 exports.getDoctor = async (req,res) => {
     res.json(req.profile)
 }
-
+exports.getPhoto = (req, res, next) => {
+    if (req.profile.avatar.data) {
+        res.set(("Content-Type", req.profile.avatar.contentType));
+        return res.send(req.profile.avatar.data);
+    }
+    next();
+};
 exports.getDoctors =async (req,res) => {
     const page = req.query.page||1
     try {

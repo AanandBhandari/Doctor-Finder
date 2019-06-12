@@ -10,3 +10,6 @@ export const getDoctors = () => {
     })
     .catch(e=>console.log(e))
 }
+export const getProfileImage = id => {
+    return `${base_url}/doctor/photo/${id}`;
+};

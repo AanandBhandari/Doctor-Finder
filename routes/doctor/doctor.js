@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { getDoctors, getDoctor, doctorById, deleteDoctor, updateDoctor, addprofilePicture, addLocation, getReviews,deleteReview} = require('../../controllers/doctor/doctor')
+const { getDoctors, getDoctor, doctorById, deleteDoctor, updateDoctor, addprofilePicture, addLocation, getReviews,deleteReview,getPhoto} = require('../../controllers/doctor/doctor')
 const {authenticator,hasAuthorization } = require('../../controllers/doctor/auth')
 const { validateDoctorUpdateData, validateGeolocation} = require('../../validator')
 
@@ -10,7 +10,7 @@ router.delete('/deleteReview/:id',authenticator, hasAuthorization,deleteReview)
 
 router.put('/doctor/addProfilePicture/:id', authenticator, hasAuthorization, addprofilePicture)
 router.put('/doctor/addGeoLocation/:id/', validateGeolocation, authenticator, hasAuthorization,addLocation)
-
+router.get('/doctor/photo/:id',getPhoto)
 
 router.route('/doctor/:id')
         .get(getDoctor)

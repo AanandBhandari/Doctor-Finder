@@ -10,15 +10,15 @@ class Doctors extends Component {
     }
     componentDidMount() {
         getDoctors().then(doctors =>{
-            if (doctors.error) {
-                console.log(doctors.error);
-            } else {
-                this.setState({doctors})
+            if (doctors) {
+                this.setState({doctors:doctors})
             }
         })
+        .catch(e=>alert(e))
     }
+    
     render(){
-        const {doctors} = this.state
+        let {doctors} = this.state
         return (
             <div className="container">
                 <div className="row">
@@ -30,6 +30,7 @@ class Doctors extends Component {
                     </div>
                 </div>
                 {/* all doctors here */}
+            
                 <RenderDoctors doctors={doctors}/>
                 </div>
         )
