@@ -1,4 +1,5 @@
 const Doctor = require('../../models/Doctor')
+const DoctorData = require('../../models/DoctorData')
 const Reviews = require('../../models/Reviews')
 const formidable = require("formidable");
 const fs = require("fs");
@@ -23,6 +24,8 @@ exports.getPhoto = (req, res, next) => {
         res.set(("Content-Type", req.profile.avatar.contentType));
         return res.send(req.profile.avatar.data);
     }
+    res.set(("Content-Type",'image/png'))
+    // return res.json({err :'error'});
     next();
 };
 exports.getDoctors =async (req,res) => {
@@ -31,7 +34,7 @@ exports.getDoctors =async (req,res) => {
         const doctors = await Doctor.find({})
         .skip((perPage * page) - perPage)
         .limit(perPage)
-        .select("name lastname email phoneno website specialities titles currentCity avatar location")
+        .select("name lastname email phoneno website specialities titles currentCity location")
        if (doctors) {
            
           return res.status(200).json(doctors)
@@ -145,4 +148,22 @@ exports.deleteReview = (req,res) => {
                     .catch(e => res.status(400).json('this review does not exit'))
         })
         .catch(e => res.status(400).json('This review does not exit'))
+}
+
+exports.doctorDataSpecialities = (req,res)=> {
+    let text = req.query.s;
+    let result = [];
+    // let regex = new RegExp(textToSearch)
+    DoctorData.find({}, { "_id": 0,"speciality":1})
+    .then(data=> {
+        data[0].speciality.forEach(a=> { 
+            if (a.toLowerCase().indexOf(text.toLowerCase()) > -1){
+                result.push(a)
+            }})
+                    if (result) {
+                        return res.json(result)
+                    }
+                    res.status(400).json('error..')
+    })
+
 }

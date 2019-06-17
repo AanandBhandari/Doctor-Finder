@@ -1,4 +1,5 @@
 import React from "react";
+import { signout, isAuthenticated } from "../utils/doctorRequests";
 import { Link, withRouter } from "react-router-dom";
 const Menu = () => (
     <nav className="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -37,10 +38,12 @@ const Menu = () => (
                         </ul>
                     </li>
                 </ul>
-
+                {!isAuthenticated() && <>
                 <Link className="navbar-right btn btn-info " to="/" style={{margin:5}}>Signup</Link>
                 <Link className="navbar-right btn btn-info" to="/" style={{ margin: 5 }}>Signin</Link>
+                <Link className="navbar-right btn btn-info " to="/doctorSignUp" style={{ margin: 5 }}>Doctorsignup</Link>
 
+                </>}   
             </div>
                 {/* <!-- /.navbar-collapse --> */}
         </div>

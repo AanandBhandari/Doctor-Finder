@@ -22,13 +22,13 @@ exports.signup = async (req, res) => {
             );
             // await verifyEmail(req.body.email,req.body.name,token)
             res.status(200).json({ message: `Follow the link provided to ${req.body.email} to verify it.` });
-            setTimeout(async () => {
-                // console.log(req.body.email);
-                const user = await User.findOne({ email: req.body.email })
-                !user.isRegistred && await User.deleteOne({ _id: user._id });
-                user.isRegistred && await User.updateOne({ _id: user._id }, { $unset: { isRegistred: "" } }, { multi: false });
+            // setTimeout(async () => {
+            //     // console.log(req.body.email);
+            //     const user = await User.findOne({ email: req.body.email })
+            //     !user.isRegistred && await User.deleteOne({ _id: user._id });
+            //     user.isRegistred && await User.updateOne({ _id: user._id }, { $unset: { isRegistred: "" } }, { multi: false });
 
-            }, 10000)
+            // }, 10000)
 
         }
 

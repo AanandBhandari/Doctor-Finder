@@ -1,20 +1,25 @@
 import React, { Component } from "react";
-import {getDoctors} from '../../utils/Requests'
+import {getDoctors} from '../../utils/doctorRequests'
 import RenderDoctors from './renderDoctors'
 class Doctors extends Component {
     constructor() {
         super();
         this.state = {
-            doctors : []
+            doctors : [],
+            star : 0
         }
     }
     componentDidMount() {
-        getDoctors().then(doctors =>{
-            if (doctors) {
-                this.setState({doctors:doctors})
-            }
-        })
-        .catch(e=>alert(e))
+        // // getAll doctors
+        // getDoctors().then(doctors =>{
+        //     if (doctors) {
+        //         this.setState({doctors:doctors})
+        //     }
+        // })
+        // .catch(e=>alert(e))
+        // // getAll star
+
+
     }
     
     render(){

@@ -1,11 +1,7 @@
 const mongoose = require('mongoose');
 const doctorDataSchema = new mongoose.Schema({
-    speciality : [{
-        type :String,
-    }],
-    title : [{
-        type : String
-    }]
+    speciality : [String],
+    title : [String]
 
 })
 module.exports = mongoose.model("DoctorData", doctorDataSchema);
