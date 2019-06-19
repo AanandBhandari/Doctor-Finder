@@ -1,5 +1,6 @@
 import appconstants from './appConstants'
 const { base_url } = appconstants
+console.log(base_url);
 
 export const signup = (user) => {
     return fetch(`${base_url}/doctor/signup`,{

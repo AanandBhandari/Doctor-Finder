@@ -9,7 +9,7 @@ exports.title = ['A.U. - Audiologist','AE-C - Certified Asthma Educator']
 
 // ANP   –   Adult Nurse Practitioner
 
-// ATC   –   Certified Athletic Trainer
+// ATC   –   Certified Athletic Trainer 
 
 // Au.D.–   Doctorate of Audiology
 
