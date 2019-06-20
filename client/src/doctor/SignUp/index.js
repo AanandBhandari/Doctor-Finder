@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { signup, getSpecialities, getTiltes } from "../../utils/doctorRequests";
+import { signup, doctorData } from "../../utils/doctorRequests";
 import { SignUpForm, BasicInfoForm, SpecialitiesForm, TitlesForm} from "./SignUpform";
 import { Link } from "react-router-dom";
 
@@ -89,7 +89,7 @@ class Specialities extends Component {
         item[i] = e.target.value
         this.setState({ specialities: item })
         if (item[i] && item[i].length > 1) {
-            getSpecialities(item[i])
+            doctorData(item[i], 'speciality')
             .then(s => {
                     this.setState({ sQuryRslt: s })
                 })
@@ -124,15 +124,13 @@ class Tiltes extends Component {
         this.setState({ titles: dltItem.splice(i, 1) })
     }
     handleTitles = (e, i) => {
-        console.log(this.state.titles);
         let item = this.state.titles
         item[i] = e.target.value
         this.setState({ titles: item })
         if (item[i] && item[i].length > 1) {
-            getTiltes(item[i])
+            doctorData(item[i],'title')
                 .then(s => {
                     this.setState({ tQuryRslt: s })
-                    console.log(this.state.tQuryRslt);
                 })
         }
 

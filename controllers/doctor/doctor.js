@@ -149,39 +149,21 @@ exports.deleteReview = (req,res) => {
         })
         .catch(e => res.status(400).json('This review does not exit'))
 }
-
-exports.doctorDataSpecialities = (req,res)=> {
+exports.doctorData = (req, res) => {
     let text = req.query.s;
+    let topic = req.query.topic
+    let obj = topic === 'title' ? { "_id": 0, 'title': 1 } : { "_id": 0, 'speciality': 1 }
     let result = [];
-    // let regex = new RegExp(textToSearch)
-    DoctorData.find({}, { "_id": 0,"speciality":1})
-    .then(data=> {
-        data[0].speciality.forEach(a=> { 
-            if (a.toLowerCase().indexOf(text.toLowerCase()) > -1){
-                result.push(a)
-            }})
-                    if (result) {
-                        // console.log(result);
-                        if (result.length > 10) result.length = 7
-                        return res.json(result)
-                    }
-                    res.status(400).json('error..')
-    })
-
-}
-exports.doctorDataTitles = (req, res) => {
-    let text = req.query.s;
-    let result = [];
-    DoctorData.find({}, { "_id": 0, "title": 1 })
-        .then(data => {
-            data[0].title.forEach(a => {
+    DoctorData.find({}, obj)
+    .then(data => {
+        let cases = data[0].speciality || data[0].title
+            cases.forEach(a => {
                 if (a.toLowerCase().indexOf(text.toLowerCase()) > -1) {
                     result.push(a)
                 }
             })
             if (result) {
                 if (result.length>7) result.length=7
-                console.log(result.length);
                 return res.json(result)
             }
             res.status(400).json('error..')

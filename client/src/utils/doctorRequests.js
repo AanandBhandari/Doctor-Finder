@@ -43,18 +43,8 @@ export const isAuthenticated = () => {
         return false;
     }
 }
-export const getSpecialities = (s) => {
-    return fetch(`${base_url}/doctorDataSpecialities?s=${s}`, {
-        method: 'GET'
-    })
-        .then(data => {
-            // console.log(data); response object
-            return data.json()
-        })
-        .catch(e=>console.log(e))
-}
-export const getTiltes = (s) => {
-    return fetch(`${base_url}/doctorDataTitles?s=${s}`, {
+export const doctorData = (s,topic) => {
+    return fetch(`${base_url}/doctorData?s=${s}&topic=${topic}`, {
         method: 'GET'
     })
         .then(data => {
