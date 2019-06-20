@@ -48,7 +48,17 @@ export const getSpecialities = (s) => {
         method: 'GET'
     })
         .then(data => {
+            // console.log(data); response object
             return data.json()
         })
         .catch(e=>console.log(e))
+}
+export const getTiltes = (s) => {
+    return fetch(`${base_url}/doctorDataTitles?s=${s}`, {
+        method: 'GET'
+    })
+        .then(data => {
+            return data.json()
+        })
+        .catch(e => console.log(e))
 }

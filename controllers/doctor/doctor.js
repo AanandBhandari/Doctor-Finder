@@ -161,9 +161,30 @@ exports.doctorDataSpecialities = (req,res)=> {
                 result.push(a)
             }})
                     if (result) {
+                        // console.log(result);
+                        if (result.length > 10) result.length = 7
                         return res.json(result)
                     }
                     res.status(400).json('error..')
     })
+
+}
+exports.doctorDataTitles = (req, res) => {
+    let text = req.query.s;
+    let result = [];
+    DoctorData.find({}, { "_id": 0, "title": 1 })
+        .then(data => {
+            data[0].title.forEach(a => {
+                if (a.toLowerCase().indexOf(text.toLowerCase()) > -1) {
+                    result.push(a)
+                }
+            })
+            if (result) {
+                if (result.length>7) result.length=7
+                console.log(result.length);
+                return res.json(result)
+            }
+            res.status(400).json('error..')
+        })
 
 }

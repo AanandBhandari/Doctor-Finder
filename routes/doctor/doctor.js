@@ -1,10 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const { getDoctors, getDoctor, doctorById, deleteDoctor, updateDoctor, addprofilePicture, addLocation, getReviews, deleteReview, getPhoto, doctorDataSpecialities} = require('../../controllers/doctor/doctor')
+const { getDoctors, getDoctor, doctorById, deleteDoctor, updateDoctor, addprofilePicture, addLocation, getReviews, deleteReview, getPhoto, doctorDataSpecialities, doctorDataTitles} = require('../../controllers/doctor/doctor')
 const {authenticator,hasAuthorization } = require('../../controllers/doctor/auth')
 const { validateDoctorUpdateData, validateGeolocation} = require('../../validator')
 
 router.get('/doctorDataSpecialities', doctorDataSpecialities)
+router.get('/doctorDataTitles', doctorDataTitles)
 router.get('/getDoctors',getDoctors)
 router.get('/getReviews/:id', getReviews)
 router.delete('/deleteReview/:id',authenticator, hasAuthorization,deleteReview)

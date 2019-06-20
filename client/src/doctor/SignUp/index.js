@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { signup, getSpecialities } from "../../utils/doctorRequests";
+import { signup, getSpecialities, getTiltes } from "../../utils/doctorRequests";
 import { SignUpForm, BasicInfoForm, SpecialitiesForm, TitlesForm} from "./SignUpform";
 import { Link } from "react-router-dom";
 
@@ -85,15 +85,13 @@ class Specialities extends Component {
         this.setState({ specialities: dltItem.splice(i, 1) })
     }
     handleSpecialities = (e, i) => {
-        console.log(this.state.specialities);
         let item = this.state.specialities
         item[i] = e.target.value
         this.setState({ specialities: item })
         if (item[i] && item[i].length > 1) {
             getSpecialities(item[i])
-                .then(s => {
+            .then(s => {
                     this.setState({ sQuryRslt: s })
-                    console.log(this.state.sQuryRslt);
                 })
         }
 
@@ -110,63 +108,52 @@ class Specialities extends Component {
     }
 }
 
-// class Tiltes extends Component {
-//     constructor() {
-//         super();
-//         this.state = {
-//             titles: [''],
-//             tQuryRslt: []
-//         }
-//     }
-//     addTitles = () => {
-//         this.setState({ titles: [...this.state.titles, ''] })
-//     }
-//     deleteTitles = (i) => {
-//         let dltItem = this.state.titles;
-//         this.setState({ titles: dltItem.splice(i, 1) })
-//     }
-//     handleTitles = (e, i) => {
-//         console.log(this.state.titles);
-//         let item = this.state.titles
-//         item[i] = e.target.value
-//         this.setState({ titles: item })
-//         if (item[i] && item[i].length > 1) {
-//             getSpecialities(item[i])
-//                 .then(s => {
-//                     this.setState({ tQuryRslt: s })
-//                     console.log(this.state.tQuryRslt);
-//                 })
-//         }
+class Tiltes extends Component {
+    constructor() {
+        super();
+        this.state = {
+            titles: [''],
+            tQuryRslt: []
+        }
+    }
+    addTitles = () => {
+        this.setState({ titles: [...this.state.titles, ''] })
+    }
+    deleteTitles = (i) => {
+        let dltItem = this.state.titles;
+        this.setState({ titles: dltItem.splice(i, 1) })
+    }
+    handleTitles = (e, i) => {
+        console.log(this.state.titles);
+        let item = this.state.titles
+        item[i] = e.target.value
+        this.setState({ titles: item })
+        if (item[i] && item[i].length > 1) {
+            getTiltes(item[i])
+                .then(s => {
+                    this.setState({ tQuryRslt: s })
+                    console.log(this.state.tQuryRslt);
+                })
+        }
 
-//     }
-//     render() {
-//         return (
-//             <SpecialitiesForm
-//                 titles={this.state.titles}
-//                 addTitles={this.addTitles}
-//                 deleteTitles={this.deleteTitles}
-//                 handleTitles={this.handleTitles}
-//             />
-//         )
-//     }
-// }
+    }
+    render() {
+        return (
+            <TitlesForm
+                titles={this.state.titles}
+                addTitles={this.addTitles}
+                deleteTitles={this.deleteTitles}
+                handleTitles={this.handleTitles}
+            />
+        )
+    }
+}
 
 class DoctorSignup extends Component {
     constructor() {
         super();
         this.state = {
-            name : '',
-            lastname : '',
-            email : '',
-            password : '',
-            phoneno : '',
-            website : '',
-            currentCity : '',
-            description : '',
-            specialities : [''],
-            titles : [''],
             error : '',
-            sQuryRslt : [],
             success : false
         }
     }
@@ -194,14 +181,8 @@ class DoctorSignup extends Component {
                 )}
                 <BasicInfo/>
                 <Specialities/>
-                {/* <Tiltes/> */}
+                <Tiltes/>
                 {/* <SignUpForm
-                    stateValues={this.state}
-                    handleChange={this.handleChange}
-                    addSpecialities={this.addSpecialities}
-                    deleteSpecialities={this.deleteSpecialities}
-                    handleSpecialities={this.handleSpecialities}
-                    handelTitles = {this.handelTitles}
                     clickSubmit={this.clickSubmit}
                 /> */}
             </div>
